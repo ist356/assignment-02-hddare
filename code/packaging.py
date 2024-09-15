@@ -3,53 +3,49 @@ This is a module for parsing packging data
 '''
 
 def parse_packaging(packaging_data: str) -> list[dict]:
-    '''
-    This function parses a string of packaging data and returns a list of dictionaries.
-    The order of the list implies the order of the packaging data.
-
-    Examples:
-
-    input: "12 eggs in 1 carton" 
-    ouput: [{ 'eggs' : 12}, {'carton' : 1}]
-
-    input: "6 bars in 1 pack / 12 packs in 1 carton"
-    output: [{ 'bars' : 6}, {'packs' : 12}, {'carton' : 1}]
-
-    input: "20 pieces in 1 pack / 10 packs in 1 carton / 4 cartons in 1 box"
-    output: [{ 'pieces' : 20}, {'packs' : 10}, {'carton' : 4}, {'box' : 1}]
-    '''
-    pass # TODO: Replace this line and write code
+    sections = packaging_data.split(' / ')
+    result_dict = {}
+    
+    for section in sections:
+        parts = section.split(' in ')
+        quantity_item = parts[0].split()
+        quantity = int(quantity_item[0])
+        item = ' '.join(quantity_item[1:])
+        result_dict[item] = quantity
+        container_parts = parts[1].split()
+        container_quantity = int(container_parts[0])
+        container_item = ' '.join(container_parts[1:])
+        if container_quantity == 1:
+            result_dict[container_item] = container_quantity
+        else:
+            plural_container_item = container_item + 's' if not container_item.endswith('s') else container_item
+            result_dict[plural_container_item] = container_quantity
+    keys = list(result_dict.keys())
+    for key in keys:
+        if key.endswith('s'):
+            singular_key = key[:-1]
+            if singular_key in result_dict:
+                del result_dict[singular_key]
+    result = [{key: value} for key, value in result_dict.items()]
+    
+    return result
 
 
 def calc_total_units(package: list[dict]) -> int:
-    '''
-    This function calculates the total number of items in a package
-
-    Example:
-
-    input: [{ 'bars' : 6}, {'packs' : 12}, {'carton' : 1}]
-    output 72 (e.g. 6*12*1)
-
-    input: [{ 'pieces' : 20}, {'packs' : 10}, {'carton' : 4}, {'box' : 1}]
-    output: 800 (e.g. 20*10*4*1)
-    '''
-    pass # TODO: Replace this line and write code
+    total_items = 1
+    for item_dict in package:
+        for quantity in item_dict.values():
+            total_items *= quantity
+    
+    return total_items
 
 
 def get_unit(package: list[dict]) -> str:
-    '''
-    This function returns the items in the packaging (this is the first item in the list)
-
-    Examples:
-
-    input: [{ 'bars' : 6}, {'packs' : 12}, {'carton' : 1}]
-    output: bars
-
-    input: [{ 'pieces' : 20}, {'packs' : 10}, {'carton' : 4}, {'box' : 1}]
-    output: pieces
-
-    '''
-    pass # TODO: Replace this line and write code
+    if not package:
+        return None
+    
+    first_item = package[0]
+    return list(first_item.keys())[0]
 
 # This will only run from here, not when imported
 # # Use this for testing / debugging cases with the debugger
