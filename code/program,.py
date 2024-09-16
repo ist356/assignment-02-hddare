@@ -28,3 +28,26 @@ Example:
 
 # TODO: Write code
 import packaging
+import json
+
+input_file = 'data/packaging.txt'
+output_file = 'data/packaging.json'
+
+packages = []
+
+with open(input_file, 'r') as file:
+    for line in file:
+        line = line.strip()
+        if not line:
+            continue
+        
+        parsed_package = packaging.parse_packaging(line)
+        total_units = packaging.calc_total_units(parsed_package)
+        unit = packaging.get_unit(parsed_package)
+        
+        print(f"{line} => total units: {total_units} {unit}")
+        
+        packages.append(parsed_package)
+
+with open(output_file, 'w') as file:
+    json.dump(packages, file, indent=4)
