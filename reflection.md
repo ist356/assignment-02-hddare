@@ -1,7 +1,7 @@
 # Reflection
 
-Student Name:  name
-Sudent Email:  email
+Student Name:  Henry Dare
+Sudent Email:  hddare@syr.edu
 
 ## Instructions
 
@@ -23,3 +23,4 @@ Examples:
 
 `--- Reflection Below This Line ---`
 
+I found the aspect of creating an entire package and then importing/calling it incredibly fascinating, and also surprisingly simple to achieve. This is super useful for staying organized when creating much larger and complex programs, where you would be writing a huge amount of functions. I had a pretty hard time with having the packaging.py program deal with plural vs singular words, as they would cause errors with interpreting the input properly.
